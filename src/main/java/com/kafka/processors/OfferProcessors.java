@@ -1,41 +1,21 @@
 package com.kafka.processors;
 
-import java.io.ByteArrayOutputStream;
-
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.io.BinaryEncoder;
-import org.apache.avro.io.DatumWriter;
-import org.apache.avro.io.EncoderFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.springframework.stereotype.Component;
-
 
 import com.kafka.avro.offer;
 import com.kafka.vo.OfferVo;
 
-@Component
+//@Component
 public class OfferProcessors implements Processor {
-	private static int count = 0;
+
 	@Override
 	public void process(Exchange exchange) throws Exception {
 
-		
-		
-		
 		OfferVo kafkaVOObj = exchange.getIn().getBody(OfferVo.class);
-		
-		String schemaDescription = offer.getClassSchema().toString();
-		Schema s = Schema.parse(schemaDescription);
-
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		DatumWriter<offer> writer = new GenericDatumWriter<offer>(s);
-
-		BinaryEncoder binaryEncoder = EncoderFactory.get().binaryEncoder(outputStream, null);
 
 		offer off = new offer();
-		
+
 		off.setOFFERID(kafkaVOObj.getOFFER_ID());
 		off.setDECISIONID(kafkaVOObj.getDECISION_ID());
 		off.setOFFERTYPECODE(kafkaVOObj.getOFFER_TYPE_CODE());
@@ -76,17 +56,7 @@ public class OfferProcessors implements Processor {
 		off.setACQUISITIONSTRATEGY(kafkaVOObj.getACQUISITION_STRATEGY());
 		off.setMICRRATINGASSIGNMENT(kafkaVOObj.getMICR_RATING_ASSIGNMENT());
 		off.setREFERENCEID(kafkaVOObj.getREFERENCE_ID());
-		
-		
-		writer.write(off, binaryEncoder);
-
-		binaryEncoder.flush();
-		outputStream.close();
-
-		
-		exchange.getIn().setBody(outputStream.toByteArray());
+		exchange.getIn().setBody(off);
 	}
-	
-	
 
 }

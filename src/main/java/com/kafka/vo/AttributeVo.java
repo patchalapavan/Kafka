@@ -6,8 +6,7 @@ import org.apache.camel.dataformat.bindy.annotation.DataField;
 @CsvRecord(separator = "\\|")
 public class AttributeVo {
 	
-	
-	
+		
 	@DataField(pos=1)
 	private String ATTRIBUTE_ID;
 	@DataField(pos=2)

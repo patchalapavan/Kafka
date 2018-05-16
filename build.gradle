@@ -9,6 +9,9 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
+	
+	
+	
 }
 
 apply plugin: 'java'
@@ -32,9 +35,10 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'groovy'
 
 
-//repositories {
-//    maven { url "https://binrepo.target.com/artifactory/repo1/"; }
-//}
+repositories {
+   // maven { url "https://binrepo.target.com/artifactory/repo1/"; }
+		maven { url "http://packages.confluent.io/maven/"; }
+}
 
 jar{
 
@@ -53,14 +57,18 @@ task copy(type:Copy) {
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.apache.camel:camel-spring-boot-starter:2.20.2')
+	compile('org.springframework.boot:spring-boot-starter-web') 
+	compile('org.apache.camel:camel-spring-boot-starter:2.20.2') 
 	compile('org.springframework.kafka:spring-kafka')
+	compile('io.confluent:kafka-avro-serializer:2.0.1') {
+        exclude group: 'org.slf4j'
+        exclude group: 'log4j', module: 'log4j'
+    }
 	
 	compile group: 'org.apache.camel', name: 'camel-kafka', version: '2.19.2'
 
 	
-	compile group: 'com.googlecode.json-simple', name:'json-simple', version:'1.1.1'
+	//compile group: 'com.googlecode.json-simple', name:'json-simple', version:'1.1.1'
 
 	
 	compile group: 'org.apache.camel', name: 'camel-spring-boot-starter', version: '2.19.2'
@@ -74,10 +82,14 @@ dependencies {
 	compile group: 'org.apache.camel', name: 'camel-jetty', version: '2.19.2'
 	
 	
+	//compile group: 'io.confluent', name: 'kafka-avro-serializer' , version: '2.0.1' 
+	
+	
+	
 	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile("junit:junit")
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	
 	
 	
 	testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.16'
@@ -101,6 +113,9 @@ dependencies {
 	testCompile "org.springframework:spring-test:${springTestVersion}"
 	testCompile 'com.blogspot.toomuchcoding:spock-subjects-collaborators-extension:1.2.1'
 	testCompile "org.springframework.boot:spring-boot-test:${springBootVersion}"
+	
+	
+	
 	
 	
 }

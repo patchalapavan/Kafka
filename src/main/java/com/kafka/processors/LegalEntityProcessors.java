@@ -1,42 +1,21 @@
 package com.kafka.processors;
 
-import java.io.ByteArrayOutputStream;
-
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.io.BinaryEncoder;
-import org.apache.avro.io.DatumWriter;
-import org.apache.avro.io.EncoderFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.springframework.stereotype.Component;
 
 import com.kafka.avro.legalentity;
 import com.kafka.vo.LegalEntityVo;
 
-@Component
+//@Component
 public class LegalEntityProcessors implements Processor {
-	
-	
 
 	@Override
 	public void process(Exchange exchange) throws Exception {
 
-		
-		
 		LegalEntityVo kafkaVoObj = exchange.getIn().getBody(LegalEntityVo.class);
-		
-		
-		String schemaDescription = legalentity.getClassSchema().toString();
-		Schema s = Schema.parse(schemaDescription);
-
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		DatumWriter<legalentity> writer = new GenericDatumWriter<legalentity>(s);
-
-		BinaryEncoder binaryEncoder = EncoderFactory.get().binaryEncoder(outputStream, null);
 
 		legalentity le = new legalentity();
-		
+
 		le.setLEGALENTITYID(kafkaVoObj.getLEGAL_ENTITY_ID());
 		le.setAPPLICATIONID(kafkaVoObj.getAPPLICATION_ID());
 		le.setLEGALENTITYTYPECD(kafkaVoObj.getLEGAL_ENTITY_TYPE_CD());
@@ -71,18 +50,8 @@ public class LegalEntityProcessors implements Processor {
 		le.setDLQUALIFYINGCARDTYPE(kafkaVoObj.getDL_QUALIFYING_CARD_TYPE());
 		le.setDLQUALIFYINGCARDBYPASSED(kafkaVoObj.getDL_QUALIFYING_CARD_BYPASSED());
 		le.setREFERENCEID(kafkaVoObj.getREFERENCE_ID());
-		
-		
-		writer.write(le, binaryEncoder);
+		exchange.getIn().setBody(le);
 
-		binaryEncoder.flush();
-		outputStream.close();
-
-		
-		exchange.getIn().setBody(outputStream.toByteArray());
-			
 	}
 
-	
-	
 }
